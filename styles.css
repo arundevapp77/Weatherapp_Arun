@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+.bg-sunny {
+    background: #667eea;
+}
+
+.bg-cloudy {
+    background: #8a95a5;
+}
+
+.bg-rainy {
+    background: #4b6cb7;
+}
+
+.bg-snowy {
+    background: #e0eafc;
+}
+
+.bg-clear {
+    background: #a6c1ee;
+}
+
+.bg-thunderstorm {
+    background: #2c3e50;
+}
+
+.bg-default {
+    background: #4A90E2;
+}
+
+input::placeholder {
+    font-weight: 500;
+}
+
+.news-scroll-container {
+    animation: scroll-horizontal 30s linear infinite;
+}
+
+.news-scroll-container:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-horizontal {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.news-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    width: 320px;
+}
+
+.news-card:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.news-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.news-content {
+    padding: 1.5rem;
+}
+
+.news-card h3 {
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.news-card p {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.news-card a {
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.news-card a:hover {
+    gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+    .glass-card {
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+}
