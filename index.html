@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Insights Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen transition-all duration-1000" id="body">
+    <div class="min-h-screen backdrop-blur-sm py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+            <header class="text-center mb-8">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-2 drop-shadow-lg">City Insights</h1>
+                <p class="text-white/90 text-lg drop-shadow">Discover weather and local news for any US city</p>
+            </header>
+
+            <div class="glass-card p-6 mb-8">
+                <form id="searchForm" class="flex flex-col sm:flex-row gap-3">
+                    <input
+                        type="text"
+                        id="cityInput"
+                        placeholder="Enter a US city name..."
+                        class="flex-1 px-6 py-4 rounded-xl bg-white/20 backdrop-blur-md text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 text-lg"
+                        required
+                    >
+                    <button
+                        type="submit"
+                        class="px-8 py-4 bg-white/30 hover:bg-white/40 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 transition-all duration-300 hover:scale-105"
+                    >
+                        <i class="fas fa-search mr-2"></i>Search
+                    </button>
+                </form>
+            </div>
+
+            <div id="loadingSpinner" class="hidden">
+                <div class="glass-card p-12">
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="animate-spin rounded-full h-16 w-16 border-4 border-white/30 border-t-white mb-4"></div>
+                        <p class="text-white text-lg">Fetching insights...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="hidden">
+                <div class="glass-card p-6 border-2 border-red-400/50">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-exclamation-circle text-red-300 text-2xl mt-1"></i>
+                        <div>
+                            <h3 class="text-white font-semibold text-lg mb-1">Error</h3>
+                            <p class="text-white/90" id="errorText"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultsContainer" class="hidden space-y-8">
+                <div id="weatherSection" class="glass-card p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-3xl font-bold text-white mb-1" id="cityName"></h2>
+                            <p class="text-white/80" id="currentDate"></p>
+                        </div>
+                        <div class="text-6xl" id="weatherIcon"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <div class="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+                            <i class="fas fa-temperature-high text-3xl text-white/90 mb-2"></i>
+                            <p class="text-white/70 text-sm mb-1">Temperature</p>
+                            <p class="text-3xl font-bold text-white" id="temperature"></p>
+                        </div>
+
+                        <div class="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+                            <i class="fas fa-cloud text-3xl text-white/90 mb-2"></i>
+                            <p class="text-white/70 text-sm mb-1">Conditions</p>
+                            <p class="text-xl font-semibold text-white" id="conditions"></p>
+                        </div>
+
+                        <div class="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
+                            <i class="fas fa-tint text-3xl text-white/90 mb-2"></i>
+                            <p class="text-white/70 text-sm mb-1">Humidity</p>
+                            <p class="text-3xl font-bold text-white" id="humidity"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="forecastSection" class="glass-card overflow-hidden">
+                    <button id="forecastToggle" class="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-all duration-300">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-calendar-alt text-2xl text-white"></i>
+                            <h2 class="text-2xl font-bold text-white">10-Day Forecast</h2>
+                        </div>
+                        <i class="fas fa-chevron-down text-white text-xl transition-transform duration-300" id="forecastChevron"></i>
+                    </button>
+                    <div id="forecastContainer" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+                        <div class="overflow-x-auto p-6 pt-0">
+                            <div id="forecastContent" class="flex gap-4 min-w-max"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="newsSection" class="glass-card p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fas fa-newspaper text-3xl text-white"></i>
+                        <h2 class="text-3xl font-bold text-white">Local News</h2>
+                    </div>
+                    <div class="overflow-hidden">
+                        <div id="newsContainer" class="news-scroll-container flex gap-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="hourlyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="glass-card max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between p-6 border-b border-white/20">
+                <div>
+                    <h3 class="text-2xl font-bold text-white" id="modalDate"></h3>
+                    <p class="text-white/70 text-sm" id="modalCity"></p>
+                </div>
+                <button id="closeModal" class="text-white/80 hover:text-white text-3xl transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto p-6">
+                <div id="hourlyContent" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
